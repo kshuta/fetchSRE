@@ -3,7 +3,7 @@ This repo serves as Shuta Kumada's submission for the Fetch SRE challenge.
 
 # Running the submission
 ## Requirements
-- [Go version 1.22](https://go.dev/doc/install)
+- [Go version 1.22 or higher](https://go.dev/doc/install)
 
 ## Steps for running the submission
 1. Clone the repo.
