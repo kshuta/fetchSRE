@@ -1,11 +1,11 @@
 # Fetch SRE challenge
-This repo serves as the submission for the Fetch SRE challenge.
+This repo serves as Shuta Kumada's submission for the Fetch SRE challenge.
 
 # Running the submission
 ## Requirements
-- Go version 1.22
+- [Go version 1.22](https://go.dev/doc/install)
 
-## Steps:
+## Steps for running the submission
 1. Clone the repo.
 
 2. Run `go mod tidy` to install dependencies.
