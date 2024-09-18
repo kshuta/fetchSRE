@@ -1,4 +1,0 @@
-time=2024-09-18T03:02:39.316-07:00 level=INFO msg="running health check" filename=test.yml
-time=2024-09-18T03:02:39.317-07:00 level=INFO msg="got domain map" host2Domain="map[https://fetch.com/:fetch.com https://fetch.com/careers:fetch.com https://fetch.com/some/post/endpoint:fetch.com https://www.fetchrewards.com/:www.fetchrewards.com]" domain2counter="map[fetch.com:0x140000ae230 www.fetchrewards.com:0x140000ae240]"
-time=2024-09-18T03:02:39.317-07:00 level=INFO msg="checking health"
-time=2024-09-18T03:02:42.400-07:00 level=INFO msg="received signal, exiting"
