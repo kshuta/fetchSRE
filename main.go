@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/kshuta/fetchSRE/healthCheck"
 )
@@ -30,11 +32,14 @@ func main() {
 		return
 	}
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
 		Level: getLogLevel(),
 	}))
 
-	err := healthCheck.Run(args[1], logger)
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+	err := healthCheck.Run(args[1], sigChan, logger)
 	if err != nil {
 		logger.Error("running health check", "err", err)
 		return
