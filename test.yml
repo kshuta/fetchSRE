@@ -17,3 +17,5 @@
   url: https://fetch.com/some/post/endpoint
 - name: fetch rewards index page
   url: https://www.fetchrewards.com/
+- name: testserver
+  url: http://localhost:8080

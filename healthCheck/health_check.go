@@ -1,6 +1,7 @@
 package healthCheck
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"math"
@@ -13,7 +14,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const INTERVAL = 3
+const (
+	INTERVAL = 15  // in seconds
+	LATENCY  = 500 // in milliseconds
+)
 
 type Endpoint struct {
 	Name    string            `yaml:"name"`
@@ -46,7 +50,7 @@ func Run(fname string, sigChan chan os.Signal, logger *slog.Logger) error {
 	logger.Debug("marshalled data:", "endpoints", endpoints)
 
 	client := http.Client{
-		Timeout: 500 * time.Millisecond,
+		Timeout: LATENCY * time.Millisecond,
 	}
 
 	domain2Counter, host2Domain, err := getDomainMap(endpoints)
@@ -94,15 +98,22 @@ func checkHealth(
 		}
 		res, err := client.Do(req)
 		if err != nil {
+			var urlError *url.Error
+			if errors.As(err, &urlError) && urlError.Timeout() {
+				logger.Warn("latency is bigger than expected", "latency", LATENCY, "url", ep.URL)
+				domain2Counter[host2Domain[ep.URL]].fail++
+				continue
+			}
 			return fmt.Errorf("sending request: req=%+v, err=%w", req, err)
 		}
-
-		logger.Debug("response from endpoint:", "res", res)
+		res.Body.Close()
 
 		if checkStatusCode(res.StatusCode) {
 			domain2Counter[host2Domain[ep.URL]].success++
+			logger.Debug("successful request", "url", ep.URL)
 		} else {
 			domain2Counter[host2Domain[ep.URL]].fail++
+			logger.Debug("failed request", "url", ep.URL)
 		}
 	}
 
